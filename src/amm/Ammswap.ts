@@ -1,25 +1,4 @@
 import {
-  CpmmKeys,
-  ComputeClmmPoolInfo,
-  PoolUtils,
-  ReturnTypeFetchMultiplePoolTickArrays,
-  ApiV3Token,
-  TickArray,
-  Raydium,
-  ApiV3PoolInfoStandardItemCpmm,
-  CurveCalculator,
-  TxVersion,
-  CurrencyAmount,
-  Currency,
-  splAccountLayout,
-  ApiV3PoolInfoConcentratedItem,
-  ClmmKeys,
-  CpmmRpcData,
-  CpmmPoolInfoInterface,
-  SwapResult,
-  TxBuildData
-} from '@raydium-io/raydium-sdk-v2';
-import {
   VersionedTransaction,
   BlockhashWithExpiryBlockHeight,
   Transaction,
@@ -37,7 +16,7 @@ import BN from 'bn.js';
 import {
   initSdk,
   logger,
-  isValidCpmm,
+  isValidAmm,
   sleep,
   getWallet,
   txVersion,
@@ -47,7 +26,6 @@ import {
   COMPUTE_UNIT_PRICE,
   BUFFER,
 } from '../config';
-import { K } from '@raydium-io/raydium-sdk-v2/lib/type-7da56d56';
 import { isReturnStatement } from 'typescript';
 import { TransportMultiOptions } from 'pino';
 import { publicKey } from '@project-serum/anchor/dist/cjs/utils';
@@ -76,34 +54,34 @@ export const getRandomValidatorKey = (): PublicKey => {
 
 export const getPoolInfo = async (connection: Connection, wallet: Keypair) => {
 
-  const raydium = await initSdk(connection, wallet);
-  let poolInfo: ApiV3PoolInfoStandardItemCpmm;
-  let poolKeys: CpmmKeys | undefined;
+  const pumpfun = await initSdk(connection, wallet);
+  let poolInfo: ApiV3PoolInfoStandardItemAmm;
+  let poolKeys: AmmKeys | undefined;
   let tickCache: ReturnTypeFetchMultiplePoolTickArrays;
-  let cpmmPoolInfo: CpmmPoolInfoInterface;
-  let rpcData: CpmmRpcData;
+  let AmmPoolInfo: AmmPoolInfoInterface;
+  let rpcData: AmmRpcData;
 
-  if (raydium.cluster === 'mainnet') {
-    const data = await raydium.api.fetchPoolById({ ids: poolId });
-    poolInfo = data[0] as ApiV3PoolInfoStandardItemCpmm;
-    if (!isValidCpmm(poolInfo.programId)) throw new Error('target pool is not CPMM pool');
-    rpcData = await raydium.cpmm.getRpcPoolInfo(poolInfo.id, true);
+  if (pumpfun.cluster === 'mainnet') {
+    const data = await pumpfun.api.fetchPoolById({ ids: poolId });
+    poolInfo = data[0] as ApiV3PoolInfoStandardItemAmm;
+    if (!isValidAmm(poolInfo.programId)) throw new Error('target pool is not Amm pool');
+    rpcData = await pumpfun.Amm.getRpcPoolInfo(poolInfo.id, true);
   } else {
-    const data = await raydium.cpmm.getPoolInfoFromRpc(poolId);
+    const data = await pumpfun.Amm.getPoolInfoFromRpc(poolId);
     poolInfo = data.poolInfo;
     poolKeys = data.poolKeys;
     rpcData = data.rpcData;
   }
 
   return {
-    raydium: raydium,
+    pumpfun: pumpfun,
     poolInfo: poolInfo,
     poolKeys: poolKeys,
     rpcData: rpcData,
   };
 };
 
-export const getAmountOut = async (inputAmount: BN, baseIn: boolean, rpcData: CpmmRpcData) => {
+export const getAmountOut = async (inputAmount: BN, baseIn: boolean, rpcData: AmmRpcData) => {
   return CurveCalculator.swap(
     inputAmount,
     baseIn ? rpcData.baseReserve : rpcData.quoteReserve,
@@ -118,7 +96,7 @@ export const getAmountOut = async (inputAmount: BN, baseIn: boolean, rpcData: Cp
 //   baseIn: any,
 //   slippage: any,
 //   swapResult: any,
-//   raydium: Raydium,
+//   pumpfun: pumpfun,
 //   latestBlockhash: BlockhashWithExpiryBlockHeight,
 //   signers: Array<Keypair>,                                               // Array<Signer>: the correct datatype
 //   connection: Connection,
@@ -126,7 +104,7 @@ export const getAmountOut = async (inputAmount: BN, baseIn: boolean, rpcData: Cp
 //   jitoFee: string,
 // ) => {
 //   const provider = payer.publicKey;
-//   const { transaction } = await raydium.cpmm.swap<TxVersion.V0>({
+//   const { transaction } = await pumpfun.Amm.swap<TxVersion.V0>({
 //     poolInfo,
 //     poolKeys,
 //     payer: provider,
@@ -160,15 +138,15 @@ export const getAmountOut = async (inputAmount: BN, baseIn: boolean, rpcData: Cp
 
 
 export const makeSwapTransaction = async (
-  raydium: Raydium,
-  poolInfo: ApiV3PoolInfoStandardItemCpmm,
-  poolKeys: CpmmKeys,
+  pumpfun: pumpfun,
+  poolInfo: ApiV3PoolInfoStandardItemAmm,
+  poolKeys: AmmKeys,
   payer: PublicKey,
   baseIn: boolean,
   slippage: number,
   swapResult: SwapResult,
 ): Promise<VersionedTransaction> => {
-  const { transaction, execute } = await raydium.cpmm.swap({
+  const { transaction, execute } = await pumpfun.Amm.swap({
     poolInfo,
     poolKeys,
     payer,

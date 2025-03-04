@@ -10,7 +10,7 @@ import wallets from '../wallets.json';
 import { getWallet, getTokenAccountBalance, getCoinBalance, fetchWithTimeout } from './config';
 import { logger } from './config';
 import { Connection, Keypair } from '@solana/web3.js';
-import { executeAndConfirm } from './cpmm/Raydiumswap';
+import { executeAndConfirm } from './amm/Ammswap';
 import { unpackMint, getOrCreateAssociatedTokenAccount, createTransferInstruction, Account } from '@solana/spl-token';
 import bs58 from 'bs58';
 import * as fs from 'fs';
