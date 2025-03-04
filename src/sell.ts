@@ -50,7 +50,7 @@ import {
   BUFFER,
 } from './config';
 
-import { getPoolInfo, getAmountOut, makeSwapTransaction, executeAndConfirm } from './cpmm/Raydiumswap';
+import { getPoolInfo, getAmountOut, makeSwapTransaction, executeAndConfirm } from './amm/Ammswap';
 import { Account, NATIVE_MINT } from '@solana/spl-token';
 import { executeAndConfirmByJito } from './jito-bundle';
 import { Raydium } from '@raydium-io/raydium-sdk-v2';

@@ -37,7 +37,7 @@ import BN from 'bn.js';
 import { logger } from './logger';
 import { COMPUTE_UNIT_PRICE, COMPUTE_UNIT_LIMIT, RPC_ENDPOINT, YOUR_WALLET_SECRET_KEY } from './constants';
 import wallets from './../../wallets.json';
-import { executeAndConfirm } from '../cpmm/Raydiumswap';
+import { executeAndConfirm } from '../amm/Ammswap';
 import { log } from 'console';
 
 // export const connection = new Connection(RPC_ENDPOINT); //<YOUR_RPC_URL>

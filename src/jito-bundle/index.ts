@@ -11,7 +11,7 @@ import {
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { logger, sleep } from '../config';
-import { confirm } from '../cpmm/Raydiumswap';
+import { confirm } from '../amm/Ammswap';
 import { Currency, CurrencyAmount } from '@raydium-io/raydium-sdk-v2';
 import bs58 from 'bs58';
 

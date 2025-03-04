@@ -20,7 +20,7 @@ import {
   VersionedTransaction,
   TransactionMessage,
 } from '@solana/web3.js';
-import { executeAndConfirm } from './cpmm/Raydiumswap';
+import { executeAndConfirm } from './amm/Ammswap';
 import {
   unpackMint,
   getOrCreateAssociatedTokenAccount,

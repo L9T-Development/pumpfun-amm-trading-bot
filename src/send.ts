@@ -19,7 +19,7 @@ import {
   COMPUTE_UNIT_PRICE,
   COMPUTE_UNIT_LIMIT,
 } from './config';
-import { executeAndConfirm } from './cpmm/Raydiumswap';
+import { executeAndConfirm } from './amm/Ammswap';
 
 import bs58 from 'bs58';
 import wallets from '../wallets.json';
