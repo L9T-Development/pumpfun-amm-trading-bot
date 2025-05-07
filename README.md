@@ -1,8 +1,8 @@
-# PumpFun AMM Trading Bot
+# PumpFun AMM(pumpswap) Trading Bot
 
 ## About
 
-PumpFun AMM Trading Bot is a specialized sniping bot, volume bot and bundler designed to work with the PumpFun AMM decentralized exchange (DEX). It enables users to execute high-frequency trading strategies by automating buy/sell operations during token launches, pump events, or other fast-paced trading scenarios. Written in **TypeScript**, this bot aims to provide a seamless trading experience while allowing customization of trading strategies.
+PumpFun AMM(pumpswap) Trading Bot is a specialized sniping bot, volume bot and bundler designed to work with the PumpFun AMM decentralized exchange (DEX). It enables users to execute high-frequency trading strategies by automating buy/sell operations during token launches, pump events, or other fast-paced trading scenarios. Written in **TypeScript**, this bot aims to provide a seamless trading experience while allowing customization of trading strategies.
 
 ---
 
